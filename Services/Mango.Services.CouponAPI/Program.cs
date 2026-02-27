@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -13,6 +14,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     // dbContextOptions => dbContextOptions.UseSqlServer(builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"])
 
 });
+
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -24,30 +28,32 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.MapControllers();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+// Seed the database with data
+ApplyMigration();
+
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+void ApplyMigration()
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    try
+    {
+        var _db = services.GetRequiredService<AppDbContext>();
+
+        if (_db.Database.GetPendingMigrations().Any())
+        {
+            _db.Database.Migrate();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+        throw;
+    }
 }
