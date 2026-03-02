@@ -1,0 +1,138 @@
+@use '../../../../styles/themes/variables' as *;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $navbar-height;
+  background-color: $color-white;
+  box-shadow: $shadow-base;
+  z-index: 100;
+}
+
+.container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $spacing-6;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.logo {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  white-space: nowrap;
+  letter-spacing: -0.5px;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+  flex: 1;
+}
+
+.navLink {
+  padding: $spacing-2 $spacing-3;
+  border-radius: $border-radius-base;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-gray-600;
+  transition: color $transition-fast, background-color $transition-fast;
+
+  &:hover {
+    color: $color-primary-dark;
+    background-color: $color-primary-light;
+  }
+
+  &.active {
+    color: $color-primary-dark;
+    background-color: $color-primary-light;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  margin-left: auto;
+}
+
+.cartBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: $border-radius-full;
+  color: $color-gray-600;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: $color-gray-100;
+    color: $color-primary;
+  }
+}
+
+.cartBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: $color-primary;
+  color: $color-white;
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  width: 16px;
+  height: 16px;
+  border-radius: $border-radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btnOutline {
+  padding: $spacing-2 $spacing-4;
+  border-radius: $border-radius-base;
+  border: 1.5px solid $color-primary;
+  color: $color-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+}
+
+.btnPrimary {
+  padding: $spacing-2 $spacing-4;
+  border-radius: $border-radius-base;
+  background-color: $color-primary;
+  color: $color-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background-color: $color-primary-dark;
+  }
+}
+
+@media (max-width: $bp-md) {
+  .navLinks {
+    display: none;
+  }
+
+  .btnOutline,
+  .btnPrimary {
+    display: none;
+  }
+}
